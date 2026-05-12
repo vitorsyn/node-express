@@ -9,10 +9,18 @@
         table{ border-collapse: collapse; width: 100%;}
         th, td{ border: 1px solid #ddd; padding: 8px;}
         th{ background-color: #222; color: white;}
+        form{ margin-bottom: 20px;}
+        input{ margin-right: 10px; padding: 5px;}
+        button{padding: 5px 10px;}
     </style>
 </head>
 <body>
     <h1> Produtos Cadastrados </h1>
+    <form id="formProduto">
+        <input type="text" id="nome" placeholder="Nome do produto" required />
+        <input type="number" id="preco" step="0.01" placeholder="Preço (R$)" required/>
+        <button type="submit">Cadastrar</button>
+    </form>
     <table>
         <thead>
             <tr>
@@ -31,5 +39,26 @@
             <% }) %>
         </tbody>
     </table>
+    <script>
+        const form = document.getElementById('formProduto');
+        form.addEventListener('submit', async(e)=>{
+            e.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const preco = parseFloat(document.getElementById('preco').value);
+
+            const res = await fetch('/produtos', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({nome, preco})
+            });
+
+            if(res.ok){
+                alert('Produto cadastrado com sucesso!')
+                window.location.reload();
+            }else{
+                alert("Erro ao cadastrar produto.")
+            }
+        })
+    </script>
 </body>
 </html>

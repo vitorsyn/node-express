@@ -11,3 +11,5 @@ router.get('/', async(req, res)=>{
         res.status(500).json({ erro: "Erro ao carregar os produtos!"})
     }
 })
+
+module.exports = router;

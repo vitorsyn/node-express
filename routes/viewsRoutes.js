@@ -2,13 +2,13 @@ const express = require('express')
 const router = express.Router();
 const Produto = require('../models/produto')
 
-
-router.get('/', async(req, res)=>{
+router.get('/', async(req,res) => {
     try {
-        const produto = await Produto.findAll();
+        const produtos = await Produto.findAll();
         res.render('lista', { produtos });
     } catch (error) {
-        res.status(500).json({ erro: "Erro ao carregar os produtos!"})
+        res.status(500).json({erro: "Erro ao carregar os produtos"})
+        
     }
 })
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+    <style>
+        body{ font-family: Arial, Helvetica, sans-serif; padding: 20px;}
+        table{ border-collapse: collapse; width: 100%;}
+        th, td{ border: 1px solid #ddd; padding: 8px;}
+        th{ background-color: #222; color: white;}
+    </style>
+</head>
+<body>
+    <h1> Produtos Cadastrados </h1>
+    <table>
+        <thead>
+            <tr>
+                 <th>ID</th>
+                 <th>Nome</th>
+                 <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody> 
+            <% produtos.forEach(produto =>  {%>
+            <tr>
+                <td><%= produto.id %></td>
+                <td><%= produto.nome %></td>
+                <td><%= produto.preco.toFixed(2) %></td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

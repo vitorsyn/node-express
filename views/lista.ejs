@@ -29,6 +29,7 @@
                  <th>ID</th>
                  <th>Nome</th>
                  <th>Preço</th>
+                 <th>Ações</th>
             </tr>
         </thead>
         <tbody> 
@@ -37,6 +38,7 @@
                 <td><%= produto.id %></td>
                 <td><%= produto.nome %></td>
                 <td><%= produto.preco.toFixed(2) %></td>
+                <td><button onclick="deletar(<%= produto.id %>)">Deletar</button></td>
             </tr>
             <% }) %>
         </tbody>
@@ -60,7 +62,22 @@
             }else{
                 alert('Erro ao cadastrar o produto.')
             }
-        })
+        });
+
+        async function deletar(id) {
+            if (!confirm('Tem certeza que deseja deletar este produto?')) return;
+
+            const res = await fetch(`/produtos/${id}`, { 
+                method: 'DELETE' 
+            });
+
+            if (res.ok) {
+                alert('Produto excluido com sucesso!')
+                window.location.reload();
+            } else {
+                alert('Erro ao deletar o produto.');
+            }
+        }
     </script>
 </body>
 </html>

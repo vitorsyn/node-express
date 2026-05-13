@@ -38,7 +38,10 @@
                 <td><%= produto.id %></td>
                 <td><%= produto.nome %></td>
                 <td><%= produto.preco.toFixed(2) %></td>
-                <td><button onclick="deletar(<%= produto.id %>)">Deletar</button></td>
+                <td>
+                    <button onclick="deletar(<%= produto.id %>)">Deletar</button>
+                    <button onclick="atualizar(<%= produto.id %>, '<%= produto.nome %>', <%= produto.preco %>)">Editar</button>
+                </td>
             </tr>
             <% }) %>
         </tbody>
@@ -67,8 +70,9 @@
         async function deletar(id) {
             if (!confirm('Tem certeza que deseja deletar este produto?')) return;
 
-            const res = await fetch(`/produtos/${id}`, { 
-                method: 'DELETE' 
+            const res = await fetch('/produtos/'+id, { 
+                method: 'DELETE',
+                headers:{'Content-Type':'application/json'}
             });
 
             if (res.ok) {
@@ -76,6 +80,35 @@
                 window.location.reload();
             } else {
                 alert('Erro ao deletar o produto.');
+            }
+        }
+
+        async function atualizar(id, nomeAtual, precoAtual) {
+            const novoNome = prompt('Novo nome:', nomeAtual);
+            if (novoNome === null) return; 
+            if (novoNome.trim() === '') {       
+                alert('O nome não pode ser vazio!');
+                return;
+            }
+
+            const novoPreco = parseFloat(prompt('Novo preço:', precoAtual));
+            if (novoPreco === null) return;        
+            if (isNaN(novoPreco)) {              
+                alert('O preço não pode ser vazio!');
+                return;
+            }
+
+            const res = await fetch('/produtos/'+id, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome: novoNome, preco: novoPreco })
+            });
+
+            if (res.ok) {
+                alert('Produto atualizado com sucesso!');
+                window.location.reload();
+            } else {
+                alert('Erro ao atualizar o produto.');
             }
         }
     </script>

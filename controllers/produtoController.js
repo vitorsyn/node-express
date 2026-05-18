@@ -11,15 +11,20 @@ exports.buscarPorId = async (req, res)=>{
     res.status(404).json({ erro:'Produto não encontrado'})
 }
 
-exports.criar = async (req, res) =>{
-    const {nome, preco} = req.body;
-        if (!nome || nome.trim() === '' || preco === undefined || isNaN(preco)) {
+exports.criar = async (req, res) => {
+    const { nome, preco, imagem } = req.body;
+
+    if (!nome || nome.trim() === '' || preco === undefined || isNaN(preco)) {
         return res.status(400).json({ erro: "Nome e preço são obrigatórios." });
     }
 
-    const novo = await Produto.create({nome, preco})
+    const dados = { nome, preco };
+    if (imagem && imagem.trim() !== '') {
+        dados.imagem = imagem;
+    }
 
-    res.status(201).json(novo)
+    const novo = await Produto.create(dados);
+    return res.status(201).json(novo);
 }
 
 exports.atualizar = async (req,res) =>{

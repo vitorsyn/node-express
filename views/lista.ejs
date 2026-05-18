@@ -27,6 +27,9 @@
                     <input type="number" step="0.01" class="form-control" placeholder="Preço (R$)" id="preco">
                 </div>
                 <div class="col">
+                    <input type="file" class="form-control" id="editarImagem" accept="image/*">
+                </div>
+                <div class="col">
                     <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
                 </div>
             </div>
@@ -35,7 +38,7 @@
             <% produtos.forEach( produto=>{ %>
                 <div class="col sm-4 mb-2">
                     <div class="card">
-                        <img class="card-img-top" src="https://www.w3schools.com/bootstrap5/img_avatar3.png" alt="Card image">
+                        <img class="card-img-top" src="<%= produto.imagem %>" alt="Card image">
                         <div class="card-body">
                             <h4 class="card-title"> <%= produto.nome %> </h4>
                             <p class="card-text"> <%= produto.preco %> </p>
@@ -51,16 +54,34 @@
     </div>
 
     <script>
+
+        function toBase64(file){
+            return new Promise((resolve, reject)=>{
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            })
+        }
+
         const form = document.getElementById('formProduto')
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const nome = document.getElementById('nome').value;
             const preco = parseFloat(document.getElementById('preco').value);
+            const imagem = document.getElementById('editarImagem');
+
+            let imagemBase64 = null;
+
+            if(imagem.files && imagem.files[0]){
+                imagemBase64 = await toBase64(imagem.files[0]);
+            }
+
 
             const res = await fetch('/produtos', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nome, preco })
+                body: JSON.stringify({ nome, preco, imagem: imagemBase64 })
             });
 
             if (res.ok) {

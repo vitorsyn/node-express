@@ -3,7 +3,12 @@ const router = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware')
 const Produto = require('../models/produto')
 
-router.get('/', authMiddleware, async(req,res) => {
+
+router.get('/', (req,res) => {
+    res.render('login')
+})
+
+router.get('/lista', authMiddleware, async(req,res) => {
     try {
         const produtos = await Produto.findAll();
         res.render('lista', { produtos });
